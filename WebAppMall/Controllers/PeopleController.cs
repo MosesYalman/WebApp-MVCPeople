@@ -83,47 +83,7 @@ namespace WebAppMall.Controllers
            //controller actions.
       
         
-        public IActionResult PartialViewPeople()
-        {
-            return PartialView();
-        }
-        [HttpPost]
-        public IActionResult PartialViewDetails(int id)
-        {
-              return PartialView();
-            
-        }
-        public IActionResult AjaxDelete(int id)
-        {
-           
-           return PartialView();
-            
-        }
-
-            public IActionResult PartialViewPeople()
-        {
-            return PartialView("_PeopleList", _peopleService.GetAll());
-        }
-        [HttpPost]
-        public IActionResult PartialViewDetails(int id)
-        {
-            Person person = _peopleService.FindById(id);
-            if (person != null)
-            {
-                return PartialView("_PersonDetails", person);
-            }
-            return NotFound();
-        }
-        public IActionResult AjaxDelete(int id)
-        {
-            Person person = _peopleService.FindById(id);
-            if (person != null)
-            {
-                _peopleService.Remove(id);
-                return PartialView("_PeopleList", _peopleService.GetAll());
-            }
-            return NotFound();
-        }
+        
         
     }
 }
