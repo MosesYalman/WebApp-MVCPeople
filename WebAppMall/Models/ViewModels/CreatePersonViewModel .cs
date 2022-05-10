@@ -7,7 +7,20 @@ namespace WebAppMall.Models.ViewModels
 {
     public class CreatePersonViewModel
     {
-        //Use to prevent overposting and to use data 
-        //annotations to validate inputs when creating new person
+        
+        [Display(Name = "First and last name")]
+        [Required]
+        public string Name { get; set; }
+
+        [Display(Name = "Phone Number")]
+        [Required]
+        public string PhoneNumber { get; set; }
+
+        [Display(Name = "City")]
+        [Required]
+        public int CityId{ get; set; }
+
+        public List<City> Cities { get; set; }
+       
     }
 }

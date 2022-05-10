@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace WebAppMall.Models.Repos
 {
-    interface IPeopleRepo
+    public interface IPeopleRepo
     {
         //Interface with following methods.
         // ▪ Person Create(Person person)

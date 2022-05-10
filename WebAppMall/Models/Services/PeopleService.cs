@@ -5,8 +5,122 @@ using System.Threading.Tasks;
 
 namespace WebAppMall.Models.Services
 {
-    public class PeopleService
+    public class PeopleService:IPeopleService
     {
-        //PeopleService – Implements IPeopleService interface.
+         IPeopleRepo _peopleRepo;
+        private readonly ILanguageRepo _languageRepo;
+        public PeopleService(IPeopleRepo peopleRepo, ILanguageRepo languageRepo)
+        {
+            _peopleRepo = peopleRepo;
+            _languageRepo = languageRepo;
+        }
+        public Person Create(CreatePersonViewModel createPerson)
+        {
+
+            if (string.IsNullOrWhiteSpace(createPerson.Name))
+
+            {
+                throw new ArgumentException("Name,Phonenuber or City, not be consist of backspace(s)/whitespace(s)");
+            }
+            Person person = new Person()
+            {
+                Name = createPerson.Name,
+                PhoneNumber = createPerson.PhoneNumber,
+                CityId = createPerson.CityId
+            };
+            _peopleRepo.Create(person);
+            return person;
+        }
+        public List<Person> GetAll()
+        {
+            return _peopleRepo.GetAll();
+        }
+
+        public List<Person> Search(string search)
+        {
+            List<Person> searchPerson = _peopleRepo.GetAll();
+            
+            foreach (Person item in _peopleRepo.GetAll())
+            {
+                if (item.Name.Contains(search, StringComparison.OrdinalIgnoreCase))
+                {
+                    searchPerson.Add(item);
+                }
+            }
+            
+            if (searchPerson.Count == 0)
+            {
+                throw new ArgumentException("Could not find what you where looking for");
+            }
+            return searchPerson;
+        }
+        public Person FindById(int id)
+        {
+            
+            Person foundPerson = _peopleRepo.GetById(id);
+
+            return foundPerson;
+        }
+        public bool Edit(int id, CreatePersonViewModel editPerson)
+        {
+            Person person = _peopleRepo.GetById(id);
+            if (person != null)
+            {
+                person.Name = editPerson.Name;
+                person.CityId = editPerson.CityId;
+                person.PhoneNumber = editPerson.PhoneNumber;
+            }
+            return _peopleRepo.Update(person);
+        }
+
+        public void Remove(int id)
+        {
+            Person personToDelete = _peopleRepo.GetById(id);
+            if (personToDelete != null)
+            {
+                _peopleRepo.Delete(personToDelete);
+            }
+        }
+
+        public PersonLanguageViewModel PersonLanguage(Person person)
+        {
+            
+                PersonLanguageViewModel personLanguage = new PersonLanguageViewModel();
+                personLanguage.Person = person;
+                List<Language> allLanguages = _languageRepo.GetAll();
+
+                foreach (PersonLanguage pLanguage in person.PersonLanguages)
+                {
+                    Language language = allLanguages.Single(l => l.Id == pLanguage.LanguageId);
+               
+             
+                    allLanguages.Remove(language);
+                }
+                personLanguage.AllLanguages = allLanguages;
+                return personLanguage;
+
+            
+        }
+
+        public void RemoveLanguage(Person person, int languageId)
+        {
+            PersonLanguage language = person.PersonLanguages.SingleOrDefault(pL => pL.LanguageId == languageId);
+        
+            person.PersonLanguages.Remove(language);
+            _peopleRepo.Update(person);
+        }
+
+        public void AddLanguage(Person person, int languageId)
+        {
+            PersonLanguage language = new PersonLanguage()
+            {
+                LanguageId = languageId,
+                PersonId = person.Id
+            };
+
+            person.PersonLanguages.Add(language);
+
+            _peopleRepo.Update(person);
+       
     }
 }

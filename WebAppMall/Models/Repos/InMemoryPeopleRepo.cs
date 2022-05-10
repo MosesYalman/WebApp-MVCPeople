@@ -5,7 +5,8 @@ using System.Threading.Tasks;
 
 namespace WebAppMall.Models.Repos
 {
-    public class InMemoryPeopleRepo
+    public class InMemoryPeopleRepo:IPeopleRepo
+
     {
         // Private static List of Person. 
         // Private static int idCounter.

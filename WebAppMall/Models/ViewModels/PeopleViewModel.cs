@@ -7,6 +7,13 @@ namespace WebAppMall.Models.ViewModels
 {
     public class PeopleViewModel
     {
-        // container for the information you need in your people Index view
+        
+        public List<Person> PeopleListView { get; set; }
+
+        public string FilterString { get; set; }
+
+        public PeopleViewModel()
+        { PeopleListView = new List<Person>(); }
+        
     }
 }
